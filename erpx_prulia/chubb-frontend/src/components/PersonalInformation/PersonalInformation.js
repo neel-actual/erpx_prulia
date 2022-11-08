@@ -77,7 +77,11 @@ class PersonalInformation extends React.Component {
       );
     });
 
-    getMemberDetails()
+        const query = new URLSearchParams(this.props.location.search);
+        let code=query.get('prudential_id');
+
+
+    getMemberDetails(code)
       .then(data => {
         key_values.forEach((key_value, index) => {
           if (data[key_value]) {

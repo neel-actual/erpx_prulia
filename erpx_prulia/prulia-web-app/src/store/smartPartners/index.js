@@ -3,7 +3,7 @@ import axios from 'axios'
 
 const state = {
   all: [],
-  loaded: false,
+  loaded: false
 }
 
 const getters = {

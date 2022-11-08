@@ -132,22 +132,28 @@
         </v-col>
         <v-row no-gutters align="center" justify="center">
           <v-col cols="2">
-            <v-img src="@/assets/logo/smart-partners/maxis-grey.png" />
+            <v-img src="@/assets/logo/smart-partners/Toptravel.png" />
           </v-col>
           <v-col cols="2">
-            <v-img src="@/assets/logo/smart-partners/dolemon-grey.png" />
-          </v-col>
-          <v-col cols="2" class="pa-2">
-            <v-img src="@/assets/logo/smart-partners/BMW-grey.png" />
+            <v-img src="@/assets/logo/smart-partners/VW.png" />
           </v-col>
           <v-col cols="2">
-            <v-img src="@/assets/logo/smart-partners/Volvo-grey.png" />
+            <v-img src="@/assets/logo/smart-partners/Maxis.png" />
           </v-col>
           <v-col cols="2">
-            <v-img src="@/assets/logo/smart-partners/chubb-grey.png" />
+            <v-img src="@/assets/logo/smart-partners/Celcom.png" />
           </v-col>
           <v-col cols="2">
-            <v-img src="@/assets/logo/smart-partners/toptravel-grey.png" />
+            <v-img src="@/assets/logo/smart-partners/Digi.png" />
+          </v-col>
+          <v-col cols="2">
+            <v-img src="@/assets/logo/smart-partners/chubb.png" />
+          </v-col>
+          <v-col cols="2">
+            <v-img src="@/assets/logo/smart-partners/IHH.jpg" />
+          </v-col>
+          <v-col cols="2">
+            <v-img src="@/assets/logo/smart-partners/dolemon.png" />
           </v-col>
         </v-row>
         <v-col cols="12" class="text-center caption" v-if="member">

@@ -1,7 +1,7 @@
 <template>
   <v-container v-if="currentBanner">
     <v-row class="dusk"
-    ><v-img
+      ><v-img
         max-height="450px"
         position="start center"
         :src="currentBanner.image"
@@ -15,9 +15,9 @@
       <v-col>
         <v-fade-transition>
           <div
-              style="width: 100%"
-              v-if="currentBanner.content"
-              v-html="currentBanner.content"
+            style="width: 100%"
+            v-if="currentBanner.content"
+            v-html="currentBanner.content"
           ></div>
         </v-fade-transition>
       </v-col>
@@ -35,7 +35,7 @@ export default {
     ...mapGetters('smartPartners', ['all']),
     currentBanner() {
       return this.all.find(banner =>
-          isEqual(this.$route.params.id, banner.name)
+        isEqual(this.$route.params.id, banner.name)
       )
     }
   },
@@ -43,7 +43,7 @@ export default {
     if (!this.loaded) {
       this.$store.dispatch('smartPartners/load')
     }
-  },
+  }
 }
 </script>
 

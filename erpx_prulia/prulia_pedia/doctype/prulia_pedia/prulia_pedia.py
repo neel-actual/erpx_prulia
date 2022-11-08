@@ -4,7 +4,7 @@
 
 from __future__ import unicode_literals
 import frappe, json
-from frappe.utils import now_datetime
+from frappe.utils import now_datetime,getdate
 from frappe.model.document import Document
 from erpx_prulia.prulia_members.doctype.prulia_member.prulia_member import mobile_member_login
 
@@ -44,21 +44,32 @@ def get_pedia_comments(data):
 
 @frappe.whitelist()
 def create_new_post(data):
-    dat = json.loads(data)
-    doc = frappe.new_doc("PRULIA Pedia")
+	# return data
+	try:
+		dat = json.loads(data)
+		if "date_1" in dat:
+			dat['date_1'] = getdate(dat['date_1'])
+		if "date_2" in dat:
+			dat['date_2'] = getdate(dat['date_2'])
+		if "date_3" in dat:
+			dat['date_3'] = getdate(dat['date_3'])
+		# return dat
+		doc = frappe.new_doc("PRULIA Pedia")
 
-    doc.flags.ignore_permissions = True
-    doc.flags.ignore_mandatory = True
+		doc.flags.ignore_permissions = True
+		doc.flags.ignore_mandatory = True
 
-    for key in dat:
-        doc.set(key, dat.get(key))
-    doc.published_date = now_datetime()
-    member = mobile_member_login()
-    doc.prudential_id = member.name
+		for key in dat:
+			doc.set(key, dat.get(key))
+		doc.published_date = now_datetime()
+		member = mobile_member_login()
+		doc.prudential_id = member.name
 
-    doc.save()
+		doc.save()
 
-    return doc
+		return doc
+	except Exception as e:
+		return e
 
 
 @frappe.whitelist()

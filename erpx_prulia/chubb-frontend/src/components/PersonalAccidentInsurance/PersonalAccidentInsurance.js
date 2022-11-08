@@ -17,6 +17,10 @@ class PersonalAccidentInsurance extends React.Component {
   };
 
   render() {
+
+        const query = new URLSearchParams(this.props.location.search);
+        let code=query.get('prudential_id');
+
     return (
       <div className="mainDivPersonal">
         <div className="topDiv">
@@ -276,7 +280,7 @@ class PersonalAccidentInsurance extends React.Component {
 
           {this.props.state.total != 0 && (
             <div className="buttonDiv">
-              <Link to="/personal-information">ENROLL NOW</Link>
+	      <Link to={ "/personal-information?prudential_id=" + code }>ENROLL NOW</Link>
             </div>
           )}
         </div>

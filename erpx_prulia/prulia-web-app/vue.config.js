@@ -26,6 +26,7 @@ if (!isDev) {
   config.configureWebpack = {
     plugins: [new BomPlugin(true)],
     optimization: {
+      
       minimize: true,
       minimizer: [
         new TerserPlugin({

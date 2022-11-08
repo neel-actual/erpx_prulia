@@ -30,10 +30,11 @@ export const memberDetailsMap = (childNum) => {
     return key_pair;
 };
 
-export function getMemberDetails() {
+export function getMemberDetails(code) {
     return axios
         .get(
-            "/api/method/erpx_prulia.prulia_members.doctype.prulia_member.prulia_member.mobile_member_login"
+            "/api/method/erpx_prulia.prulia_members.doctype.prulia_member.prulia_member.mobile_member_login",
+            { params: { prudential_id: code }}
         )
         .then((data) => {
             return data && data.data && data.data.message;

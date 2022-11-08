@@ -183,6 +183,8 @@ def get_event_list_web():
                                      ('PRULIA Event', "event_status", "!=", "Draft")],
                             order_by='start_date_time desc')
     global_defaults = frappe.get_doc("Global Defaults")
+    event_result = []
+    position_allowed = {'QA':['QA'], 'QL': ['QL']}
 
     if frappe.session.user != 'Guest':
         member = mobile_member_login()
@@ -207,8 +209,14 @@ def get_event_list_web():
                 event.pref_lang = registration[0].pref_lang
             else:
                 event.register = False
-            if (event.position_restriction and event.position_restriction == member.position):
+
+            if (event.position_restriction and member.position in position_allowed[event.position_restriction]):
                 event.can_register = True
+                event_result.append(event)
+
+	    if event.position_restriction == None:
+                event_result.append(event)
+
             if global_defaults.default_currency:
                 event.currency = global_defaults.default_currency
             elif event.position_restriction == None:
@@ -221,7 +229,7 @@ def get_event_list_web():
             if global_defaults.default_currency:
                 event.currency = global_defaults.default_currency
 
-    return events
+    return event_result
 
 
 @frappe.whitelist()

@@ -11,14 +11,18 @@
               color="secondary"
             />
           </v-list-item-avatar>
-          <v-list-item-title>
-            <div>
-              {{ member.full_name }}
-            </div>
-            <div class="caption">
-              {{ member.email }}
-            </div>
-          </v-list-item-title>
+          <v-flex xs2 md2>
+		  <v-list-item-title>
+		    <div>
+		      {{ member.full_name }}
+		    </div>
+		    <div class="caption">
+		      {{ member.email }}
+		    </div>
+		    
+		  </v-list-item-title>
+          </v-flex>
+         
           <v-list-item-action>
             <v-btn color="primary" icon :disabled="loading" @click="toggleForm"
               ><v-icon>mdi-pencil</v-icon></v-btn
@@ -184,6 +188,18 @@
               </v-list-item>
             </v-expansion-panel-content>
           </v-expansion-panel>
+           <v-expansion-panel>
+            <v-expansion-panel-header>
+              <v-subheader>Reports</v-subheader>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <div class="d-md-flex d-lg-flex d-xl-flex">
+                <MemberReport></MemberReport>
+                <PruliaEventReport/>
+                <MembershipEvent/>
+              </div>
+             </v-expansion-panel-content>
+          </v-expansion-panel>
         </v-expansion-panels>
 
         <v-slide-y-reverse-transition>
@@ -212,13 +228,19 @@ import { mapGetters } from 'vuex'
 import cloneDeep from 'lodash/cloneDeep'
 import { GENDER, MEAL_OPTIONS, SHIRT_SIZE } from '@/const'
 import UserAvatar from '@/components/common/UserAvatar'
+import MemberReport from '@/components/member-report'
+import MembershipEvent from '@/components/membership-event'
+import PruliaEventReport from '@/components/prulia-event-report'
 import UploadAvatar from './UploadAvatar'
 
 export default {
   name: 'Profile',
-  components: { UploadAvatar, UserAvatar },
+  components: { UploadAvatar, UserAvatar,MemberReport,PruliaEventReport,MembershipEvent},
   data: () => ({
     showUpload: false,
+    csvdata:[],
+    headers:{},
+    APIURL:"https://www.prulia.org.my/api/method/erpx_prulia.prulia_members.report.prulia_member_library.prulia_member_library.get_column_data?user=Wittonlam@erpx.com.my",
     memberData: null,
     disableForm: true,
     valid: false,
@@ -227,6 +249,7 @@ export default {
     MEAL_OPTIONS,
     SHIRT_SIZE,
     GENDER
+    
   }),
   computed: {
     ...mapGetters('auth', ['member'])

@@ -253,16 +253,19 @@ def forget_password(data):
 		return _("PRULIA Member {0} not found").format(dat.get('prulia_id'))
 
 
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=True)
 def mobile_member_login():
-	member_name = frappe.db.sql_list("""select name from `tabPRULIA Member` where
-			user_id=%s and user_status='Active'""", (frappe.session.user))
-	if not member_name:
-		throw(_("Unable to find member profile for {0}").format(
-			frappe.session.user), frappe.DoesNotExistError)
-	else:
-		member = frappe.get_doc('PRULIA Member', member_name[0])
-		return member
+        if frappe.session.user == 'Guest':
+                member_name = [frappe.request.args['prudential_id']]
+        else:
+                member_name = frappe.db.sql_list("""select name from `tabPRULIA Member` where
+                        user_id=%s and user_status='Active'""", (frappe.session.user))
+        if not member_name:
+                throw(_("Unable to find member profile for {0}").format(
+                        frappe.session.user), frappe.DoesNotExistError)
+        else:
+                member = frappe.get_doc('PRULIA Member', member_name[0])
+                return member
 
 @frappe.whitelist()
 def update_member_pref(data):

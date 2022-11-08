@@ -1,0 +1,29 @@
+{
+ "add_total_row": 0, 
+ "apply_user_permissions": 1, 
+ "creation": "2022-05-17 14:25:12.724804", 
+ "disabled": 0, 
+ "docstatus": 0, 
+ "doctype": "Report", 
+ "idx": 0, 
+ "is_standard": "Yes", 
+ "modified": "2022-05-17 14:25:12.724804", 
+ "modified_by": "Administrator", 
+ "module": "PRULIA Members", 
+ "name": "Prulia Membership and Event Report", 
+ "owner": "Administrator", 
+ "ref_doctype": "PRULIA Member", 
+ "report_name": "Prulia Membership and Event Report", 
+ "report_type": "Script Report", 
+ "roles": [
+  {
+   "role": "PRULIA Member"
+  }, 
+  {
+   "role": "System Manager"
+  }, 
+  {
+   "role": "PRULIA Member Administrator"
+  }
+ ]
+}

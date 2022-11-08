@@ -11,7 +11,29 @@ from frappe.utils import nowdate
 
 
 class PRULIAPA(Document):
-    pass
+    def validate(self):
+        if frappe.db.exists('PRULIA PA', self.name):
+            existing_member = frappe.get_doc('PRULIA PA', self.name)
+
+            if self.application_status != existing_member.application_status:
+                if self.application_status in ["Approved"]:
+                    self.approval_date = nowdate()
+                    path = '/home/frappe/frappe-bench/sites/site1.local/public' + self.application_form
+                    with open(path, "rb") as fileobj:
+                        filedata = fileobj.read()
+                    my_attachment = {"fname": self.application_form, "fcontent": filedata}
+                    frappe.sendmail(
+                        recipients=self.chubb_email,
+                        subject='Prulia GPA application',
+                        template='pa_confirmation',
+                        attachments=[my_attachment],
+                        args={
+                            'msg': 'Please refer attached PDF for the application form',
+                            'main_full_name': self.main_full_name,
+                            'member': self.member,
+                            'submission_date': self.submission_date,
+                        }
+                    )
 
 
 @frappe.whitelist(allow_guest=True)

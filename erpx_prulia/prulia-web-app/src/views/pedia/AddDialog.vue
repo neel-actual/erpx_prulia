@@ -53,23 +53,56 @@
           flat
         >
           <template v-for="(step, index) in steps">
-            <v-stepper-step
-              editable
-              color="primary"
-              :step="index + 1"
-              :key="`stepper-${index}`"
-            >
-              <small
-                >{{ step.label
-                }}<span
-                  class="red--text font-weight-medium"
-                  v-if="validity[index] === false"
-                  >&nbsp;(Required fields)</span
-                ></small
+            <div v-if="index + 1 != 3" :key="`stepper-${index}`">
+              <v-stepper-step
+                color="primary"
+                editable
+                :step="index + 1"
+                :key="`stepper-${index}`"
               >
-            </v-stepper-step>
+                <small
+                  >{{ step.label
+                  }}<span
+                    class="red--text font-weight-medium"
+                    v-if="validity[index] === false"
+                    >&nbsp;(Required fields)</span
+                  ></small
+                >
+              </v-stepper-step>
+            </div>
+            <div v-if="index + 1 == 3" :key="`stepper-${index}`">
+              <!--Step Title--->
+              <div v-bind:style="expandStyle">
+                <v-stepper-step
+                  class="v-stepper__step--editable"
+                  color="primary"
+                  @click="stepCollapse(index)"
+                  :step="index + 1"
+                  :key="`stepper-${index}`"
+                >
+                  <small style="width: 100%"
+                    >{{ step.label
+                    }}<span
+                      class="red--text font-weight-medium"
+                      v-if="validity[index] === false"
+                      >&nbsp;(Required fields)</span
+                    ></small
+                  >
+                  <div
+                    class="v-expansion-panel-header__icon"
+                    v-bind:style="arrowStyle"
+                  >
+                    <i
+                      aria-hidden="true"
+                      class="v-icon notranslate mdi mdi-chevron-down theme--light"
+                    ></i>
+                  </div>
+                </v-stepper-step>
+              </div>
+            </div>
+
             <v-stepper-content
-              editable
+              :editable="true"
               :step="index + 1"
               :key="`stepper-content-${index}`"
             >
@@ -160,20 +193,23 @@
                         @input="dates[field.fieldname] = false"
                       ></v-date-picker>
                     </v-menu>
-
                     <v-file-input
+                      id="fileUpload"
                       v-if="field.fieldtype === 'Attach'"
+                      prepend-icon=""
                       :label="field.label"
-                      :rules="[
-                        v =>
-                          !v ||
-                          v.size < 5000000 ||
-                          'File size should be less than 5 MB!'
-                      ]"
+                      :success-messages="[fileValid]"
+                      :rules="fileInputRule"
                       @change="attachments[field.fieldname] = $event"
                       :readonly="!!field.read_only"
                     >
                     </v-file-input>
+                    <v-btn
+                      v-if="field.fieldtype === 'Attach'"
+                      @click="chooseFiles"
+                    >
+                      Upload
+                    </v-btn>
                   </v-col>
                 </v-row>
               </v-form>
@@ -208,9 +244,16 @@ const data = () => ({
   validity: [],
   mode: null,
   loading: false,
+  stepExpand: false,
+  expandStyle:
+    'border-radius:4px;background-color:white;box-shadow:0px 1px 5px #dfdfdf',
+  arrowStyle:
+    'position:absolute;right:0px;margin-right:20px;transform:rotate(0deg)',
+  stepColor: 'primary',
+  fileValid: '',
   data: {},
   attachments: {},
-  currentStep: 1,
+  currentStep: 2,
   dates: {}
 })
 
@@ -235,6 +278,24 @@ export default {
         }
         this.$emit('input', val)
       }
+    },
+    fileInputRule: function() {
+      return [
+        v => {
+          if (v) {
+            if (!v || v.size < 5000000) {
+              this.fileValid = 'File is attached'
+              return true
+            } else {
+              this.fileValid = 'File size should be less than 5 MB!'
+              return 'File size should be less than 5 MB!'
+            }
+          } else {
+            this.fileValid = ''
+            return true
+          }
+        }
+      ]
     },
     steps() {
       let sections = []
@@ -267,6 +328,27 @@ export default {
     changeMode(mode) {
       this.mode = mode
       this.validity = []
+    },
+    chooseFiles() {
+      document.getElementById('fileUpload').click()
+    },
+    //Description Expand Open and Close
+    stepCollapse(index) {
+      if (this.stepExpand == false) {
+        this.currentStep = index + 1
+        this.stepExpand = !this.stepExpand
+        this.arrowStyle =
+          'position:absolute;right:0px;margin-right:20px;transform:rotate(180deg);transition:all 0.4 ease'
+        this.expandStyle =
+          'border-radius:4px;background-color:white;box-shadow:0px -3px 5px #dfdfdf'
+      } else {
+        this.currentStep = -1
+        this.stepExpand = !this.stepExpand
+        this.arrowStyle =
+          'position:absolute;right:0px;margin-right:20px;transform:rotate(0deg)'
+        this.expandStyle =
+          'border-radius:4px;background-color:white;box-shadow:0px 1px 5px #dfdfdf'
+      }
     },
     onSubmit() {
       this.loading = true
